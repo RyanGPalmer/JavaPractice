@@ -27,9 +27,13 @@ public class Birthday {
 		this.m = m;
 		this.y = y;
 	}
-	
+
 	public String getString() {
 		return (months.get(m) + " " + d + ", " + y);
+	}
+
+	public String getValue() {
+		return "DD MM YYYY";
 	}
 
 	public int getAge() {
