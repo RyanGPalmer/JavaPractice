@@ -88,15 +88,14 @@ public class Profile {
 		String value = null;
 
 		try {
-		Scanner sc = new Scanner(file);
-		while(sc.hasNextLine()) {
-			String line = sc.nextLine();
-			if(line.toLowerCase().contains(token)) {
-				String[] splitLine = line.split(OPERATOR_ASSIGN);
-				value = splitLine[1];
-				System.out.println("Reading value of " + token + ": " + value);
+			Scanner sc = new Scanner(file);
+			while(sc.hasNextLine()) {
+				String line = sc.nextLine();
+				if(line.toLowerCase().contains(token)) {
+					String[] splitLine = line.split(OPERATOR_ASSIGN);
+					value = splitLine[1];
+				}
 			}
-		}
 		} catch (Exception e) { }
 
 		return value;
@@ -116,10 +115,18 @@ public class Profile {
 
 	Birthday enterBD() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("What is your birthday? (Format: DD MM YYYY)");
-		int d = sc.nextInt();
-		int m = sc.nextInt();
-		int y = sc.nextInt();
+		int d = 0;
+		int m = 0;
+		int y = 0;
+		while (true) {
+			System.out.println("What is your birthday? (Format: DD MM YYYY)");
+			d = sc.nextInt();
+			m = sc.nextInt();
+			y = sc.nextInt();
+			if(Birthday.isValidDate(d,m,y)) break;
+					else System.out.println("Invalid date.");
+		}
+
 		return new Birthday(d, m, y);
 	}
 

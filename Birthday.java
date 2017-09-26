@@ -6,6 +6,22 @@ public class Birthday {
 	int d;
 	int y;
 
+	static Map<Integer, Integer> monthDays = new HashMap<Integer, Integer>();
+	static {
+		monthDays.put(1, 31);
+		monthDays.put(2, 28);
+		monthDays.put(3, 31);
+		monthDays.put(4, 30);
+		monthDays.put(5, 31);
+		monthDays.put(6, 30);
+		monthDays.put(7, 31);
+		monthDays.put(8, 31);
+		monthDays.put(9, 30);
+		monthDays.put(10, 31);
+		monthDays.put(11, 30);
+		monthDays.put(12, 31);
+	}
+
 	static Map<Integer, String> months = new HashMap<Integer, String>();
 	static {
 		months.put(1, "January");
@@ -23,10 +39,11 @@ public class Birthday {
 	}
 
 	public Birthday(int d, int m, int y) {
+		// Make sure arguments are valid
+		
 		this.d = d;
 		this.m = m;
 		this.y = y;
-		System.out.println("Created new birthday object: " + getString());
 	}
 
 	public String getString() {
@@ -61,5 +78,22 @@ public class Birthday {
 		}
 
 		return age;
+	}
+
+	public static boolean isValidDate(int d, int m, int y) {
+		if(m > 12) return false;
+		else if(m < 1) return false;
+		if(d > monthDays.get(m)) return false;
+		else if (d < 1) return false;
+
+		// Check if date is in the future
+		LocalDate date = LocalDate.now();
+		if(y > date.getYear()) return false;
+		else if(y == date.getYear()) {
+			if(m > date.getMonthValue()) return false;
+			else if(m == date.getMonthValue() && d > date.getDayOfMonth()) return false;
+		}
+
+		return true;
 	}
 }
