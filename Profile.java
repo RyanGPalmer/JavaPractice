@@ -3,6 +3,15 @@ import java.io.File;
 import java.io.FileWriter;
 
 public class Profile {
+	public static final String TOKEN_NAME = "name";
+	public static final String TOKEN_PROF = "prof";
+	public static final String TOKEN_BDD = "bdd";
+	public static final String TOKEN_BDM = "bdm";
+	public static final String TOKEN_BDY = "bdy";
+	public static final String OPERATOR_ASSIGN = "=";
+	public static final String EXTENSION_PROFILE = ".prf";
+	public static final String MISC_DEFAULTNAME = "anon";
+
 	String name;
 	String prof;
 	Birthday bd;
@@ -28,6 +37,14 @@ public class Profile {
 		this.bd = bd;
 	}
 
+	String getFileDataString() {
+		return	TOKEN_NAME + OPERATOR_ASSIGN + name + '\n' +
+			TOKEN_PROF + OPERATOR_ASSIGN + prof + '\n' +
+			TOKEN_BDD + OPERATOR_ASSIGN + bd.getDayValue() + '\n' +
+			TOKEN_BDM + OPERATOR_ASSIGN + bd.getMonthValue() + '\n' +
+			TOKEN_BDY + OPERATOR_ASSIGN + bd.getYearValue();
+	}
+
 	public void buildNew() {
 		name = enterName();
 		prof = enterProf();
@@ -47,7 +64,42 @@ public class Profile {
 	}
 
 	public void loadExisting() {
-		// type profile name and load existing profile file
+		Scanner sc = new Scanner(System.in);
+		File file = new File("null.null");
+		while(true) {
+			System.out.println("Enter profile name:");
+			String name = sc.next();
+			file = new File(name + EXTENSION_PROFILE);
+			if(file.exists()) break;
+			else System.out.println("Profile not found.");
+		}
+
+		// We have the file, now time to parse it
+		name = pullValueFromFile(TOKEN_NAME, file);
+		prof = pullValueFromFile(TOKEN_PROF, file);
+
+		int bdd = Integer.parseInt(pullValueFromFile(TOKEN_BDD, file));
+		int bdm = Integer.parseInt(pullValueFromFile(TOKEN_BDM, file));
+		int bdy = Integer.parseInt(pullValueFromFile(TOKEN_BDY, file));
+		bd = new Birthday(bdd, bdm, bdy);
+	}
+
+	String pullValueFromFile(String token, File file) {
+		String value = null;
+
+		try {
+		Scanner sc = new Scanner(file);
+		while(sc.hasNextLine()) {
+			String line = sc.nextLine();
+			if(line.toLowerCase().contains(token)) {
+				String[] splitLine = line.split(OPERATOR_ASSIGN);
+				value = splitLine[1];
+				System.out.println("Reading value of " + token + ": " + value);
+			}
+		}
+		} catch (Exception e) { }
+
+		return value;
 	}
 
 	String enterName() {
@@ -82,16 +134,12 @@ public class Profile {
 
 	void writeToFile() {
 		try {
-			String filename = ((name != null) ? name : "anon") + "data.prf";
+			String filename = ((name != null) ? name : MISC_DEFAULTNAME) + EXTENSION_PROFILE;
 			File file = new File(filename);
 			if(file.createNewFile()) {
 				System.out.println("Creating " + filename + "...");
 				FileWriter wr = new FileWriter(file);
-				wr.write(
-						"name = " + name +
-						"\nprof = " + prof +
-						"\nbd = " + bd.getValue()
-					);
+				wr.write(getFileDataString());
 				wr.close();
 			} else {
 				Character c = 'z';
@@ -104,11 +152,7 @@ public class Profile {
 
 				if(c == 'Y') {
 					FileWriter wr = new FileWriter(file);
-					wr.write(
-							"name = " + name +
-							"\nprof = " + prof +
-							"\nbd = " + bd.getValue()
-						);
+					wr.write(getFileDataString());
 					wr.close();
 				} else System.out.println("Profile not saved. Data will be lost when program ends.");
 			}

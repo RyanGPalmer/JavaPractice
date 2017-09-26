@@ -26,6 +26,7 @@ public class Birthday {
 		this.d = d;
 		this.m = m;
 		this.y = y;
+		System.out.println("Created new birthday object: " + getString());
 	}
 
 	public String getString() {
@@ -34,6 +35,18 @@ public class Birthday {
 
 	public String getValue() {
 		return "DD MM YYYY";
+	}
+
+	public int getDayValue() {
+		return d;
+	}
+	
+	public int getMonthValue() {
+		return m;
+	}
+
+	public int getYearValue() {
+		return y;
 	}
 
 	public int getAge() {
