@@ -1,3 +1,4 @@
+// I think bears are the coolest animal
 import java.util.*;
 import java.time.LocalDate;
 
