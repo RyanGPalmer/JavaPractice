@@ -39,8 +39,14 @@ public class Birthday {
 	}
 
 	public Birthday(int d, int m, int y) {
-		// Make sure arguments are valid
-		
+		// If date is invalid, just set to current date
+		if(!isValidDate(d,m,y)) {
+			LocalDate date = LocalDate.now();
+			d = date.getDayOfMonth();
+			m = date.getMonthValue();
+			y = date.getYear();
+		}
+
 		this.d = d;
 		this.m = m;
 		this.y = y;

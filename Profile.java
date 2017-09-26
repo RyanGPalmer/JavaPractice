@@ -124,7 +124,7 @@ public class Profile {
 			m = sc.nextInt();
 			y = sc.nextInt();
 			if(Birthday.isValidDate(d,m,y)) break;
-					else System.out.println("Invalid date.");
+			else System.out.println("Invalid date.");
 		}
 
 		return new Birthday(d, m, y);
